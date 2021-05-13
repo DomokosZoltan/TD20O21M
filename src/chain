@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Apr 20 13:09:17 2021
+
+@author: Domokos Zoltán
+"""
+
+from copy import deepcopy
+
+import mstruct as mst
+
+
+def transform(lhs, rhs, dmap):
+    
+    def trf_fc(inds):
+    
+        res = None
+        
+        for obj in dmap:
+            
+            lhs_dims = obj[0]
+            rhs_dims = obj[1]
+            
+            sl = mst.dims_to_sl(rhs_dims)
+            rinds_rhs = inds[sl]
+            
+            rlhs = lhs.restrict(lhs_dims)
+            rrhs = rhs.restrict(rhs_dims)
+            
+            lhs_fc = rlhs.get_obj(lhs_dims)
+            rhs_fc = rrhs.get_obj(rhs_dims)
+            
+            rres = lhs_fc( rhs_fc(rinds_rhs) )
+            
+            if res is None:
+                
+                res = rres #TODO: generalize this.
+                
+            else:
+                
+                res += rres
+                
+        return res
+    
+    return trf_fc
