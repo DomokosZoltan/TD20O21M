@@ -33,10 +33,12 @@ class BsFcGen:
             genfc = obj[1]
 
             sl = mst.dims_to_sl(dims)
+            
+            rdomain = domain.restrict(dims)
 
             dims = (0, dims[1] - dims[0] ) 
 
-            codmstr = mst.MdimStruct(genfc(domain, inds[sl] ), [dims] )
+            codmstr = mst.MdimStruct(genfc(rdomain, inds[sl] ), [dims] )
 
             if res is None:
                 
